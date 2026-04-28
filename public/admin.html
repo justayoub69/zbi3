@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { background:#0f172a; color:white; font-family:sans-serif; }
+.card { background:#1e293b; padding:10px; margin:10px; border-radius:10px; }
+</style>
+</head>
+<body>
+
+<h1>Admin Panel</h1>
+
+<h2>Upload App</h2>
+<form action="/upload" method="POST" enctype="multipart/form-data">
+  <input name="name" placeholder="App name" required><br>
+  <input type="file" name="ipa" required><br>
+  <input type="file" name="icon" required><br>
+  <button>Upload</button>
+</form>
+
+<hr>
+
+<h2>Analytics</h2>
+<div id="stats"></div>
+
+<script>
+fetch("/analytics")
+.then(res => res.json())
+.then(data => {
+  let html = `
+    <p>Total Apps: ${data.totalApps}</p>
+    <p>Total Installs: ${data.totalInstalls}</p>
+  `;
+
+  data.apps.forEach(app => {
+    html += `
+      <div class="card">
+        <h3>${app.name}</h3>
+        <p>Installs: ${app.installs}</p>
+        <p>Last Install: ${app.lastInstall || "Never"}</p>
+      </div>
+    `;
+  });
+
+  document.getElementById("stats").innerHTML = html;
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IPA Store</title>
+  <style>
+    body { background:#0f172a; color:white; font-family:sans-serif; text-align:center; }
+    .grid { display:flex; flex-wrap:wrap; justify-content:center; }
+    .app { background:#1e293b; margin:10px; padding:15px; border-radius:12px; width:200px; }
+    img { width:80px; border-radius:20px; }
+    button { background:#22c55e; border:none; padding:10px; border-radius:8px; color:white; }
+  </style>
+</head>
+<body>
+
+<h1>📱 My IPA Store</h1>
+
+<div class="grid" id="apps"></div>
+
+<script>
+fetch("/apps")
+.then(res => res.json())
+.then(data => {
+  const container = document.getElementById("apps");
+
+  data.forEach(app => {
+    const div = document.createElement("div");
+    div.className = "app";
+
+    div.innerHTML = `
+      <img src="${app.icon}">
+      <h3>${app.name}</h3>
+      <p>Installs: ${app.installs}</p>
+      <a href="/install/${app.id}">
+        <button>Install</button>
+      </a>
+    `;
+
+    container.appendChild(div);
+  });
+});
+</script>
+
+</body>
+</html>
